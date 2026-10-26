@@ -13,7 +13,7 @@ function jhc_sample_angel.register_challenges()
 
 		OnPreLevelUp = function ( l )
 			if l % 4 == 0 then
-				player:choose_trait()
+				game.choose_trait()
 			end
 			player.hpmax = player.hpmax + 5
 			player.hp    = player.hp + 5

@@ -1,6 +1,6 @@
 
 function jhc_sample_enemy.register_enemies()
-    local ENEMYSHEET = core.register_sprite_sheet( "sample_enemy", nil, "sample_enemy_shadow", "sample_enemy_emissive", 301 )
+    local ENEMYSHEET = ui.register_sprite_sheet( "sample_enemy", nil, "sample_enemy_shadow", "sample_enemy_emissive", 301 )
     core.declare( "JSE_SPRITE_FIEND",  ENEMYSHEET + 1 )
 
 	register_being "shadow_fiend"

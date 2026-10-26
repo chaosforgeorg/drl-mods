@@ -24,10 +24,10 @@ function jhc_sample_adrenalpack.register_items()
 				being:msg("Nothing happens.")
 			else
 				if being:is_player() then 
-					being:remove_affect( "tired" )
+					being:remove_perk( "tired" )
 				end
-				if not being:is_affect( "adrenaline" ) then
-					being:set_affect( "adrenaline", 20 )
+				if not being:is_perk( "adrenaline" ) then
+					being:add_perk( "adrenaline", 200 )
 				end
 				local max_heal = math.floor( being.hpmax * being:get_property( "MEDKIT_OVERHEAL", 1 ) )
 				if being.hp >= max_heal then
