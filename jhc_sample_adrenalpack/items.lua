@@ -19,26 +19,33 @@ function jhc_sample_adrenalpack.register_items()
 
 		type     = ITEMTYPE_PACK,
 
-		OnUse = function(self,being)
-			if being.flags[ BF_NOHEAL ] then
-				being:msg("Nothing happens.")
-			else
-				if being:is_player() then 
-					being:remove_perk( "tired" )
+		-- hooks are placed in the runtime table
+		runtime = {
+			OnUse = function(self,being)
+				if being.flags[ BF_NOHEAL ] then
+					being:msg("Nothing happens.")
+				else
+					if being:is_player() then
+						being:remove_perk( "tired" )
+					end
+					if not being:is_perk( "adrenaline" ) then
+						being:add_perk( "adrenaline", 200 )
+					end
+					local max_heal = math.floor( being.hpmax * being:get_property( "MEDKIT_OVERHEAL", 1 ) )
+					if being.hp >= max_heal then
+						being:msg("You feel pumped up!")
+						core.callback( being, "OnMedkitUse", self )
+						return true
+					end
+					local amount = math.floor( ( (being.hpmax * diff[DIFFICULTY].powerfactor) / 4 + 2 ) * being:get_property( "MEDKIT_BONUS", 1 ) )
+					being.hp = math.min( being.hp + amount, max_heal )
+					being:msg("You feel healed and pumped up!")
+					being:add_emitter( "emit_heal_small" )
 				end
-				if not being:is_perk( "adrenaline" ) then
-					being:add_perk( "adrenaline", 200 )
-				end
-				local max_heal = math.floor( being.hpmax * being:get_property( "MEDKIT_OVERHEAL", 1 ) )
-				if being.hp >= max_heal then
-					being:msg("You feel pumped up!")
-					return true
-				end
-				local amount = math.floor( ( (being.hpmax * diff[DIFFICULTY].powerfactor) / 4 + 2 ) * being:get_property( "MEDKIT_BONUS", 1 ) )
-				being.hp = math.min( being.hp + amount, max_heal )
-				being:msg("You feel healed and pumped up!")
-			end
-			return true
-		end,
+				-- lets medkit-related perks react, like they do for regular medkits
+				core.callback( being, "OnMedkitUse", self )
+				return true
+			end,
+		},
 	}
 end
